@@ -11,7 +11,7 @@ import (
 )
 
 const connectionLogFile string = "connection.log"
-const logFile = "kaoriServer.log"
+const logFile = "dlcenterLog.json"
 
 type HTTPReqInfo struct {
 	Method    string        `json:"method"`
