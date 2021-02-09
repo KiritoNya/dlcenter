@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/KiritoNya/database"
 	"github.com/cavaliercoder/grab"
 	_ "github.com/mattn/go-sqlite3" // Import go-sqlite3 library
@@ -11,6 +10,7 @@ import (
 	"os"
 	"sort"
 	"sync"
+	"fmt"
 )
 
 
@@ -153,18 +153,15 @@ func (c *Channel) AddPrecedentDownloads() error {
 		if item.Status == pause {
 			if !item.Torrent {
 				f, err := os.Open(item.PathFile)
-				if err != nil {
-					//TODO: In error state
-					return err
+
+				if err == nil {
+					fi, _ := f.Stat()
+					item.DownloadedByte = fi.Size()
+					if item.Size != 0 && item.DownloadedByte != 0 {
+						item.Percentage = fmt.Sprintf("%.02f", 100.0/ float64(item.Size/item.DownloadedByte)) + "%"
+					}
 				}
 
-				fi, err := f.Stat()
-				if err != nil {
-					//TODO: In error state
-					return err
-				}
-				item.DownloadedByte = fi.Size()
-				item.Percentage = fmt.Sprintf("%.02f", 100.0/ float64(item.Size/item.DownloadedByte)) + "%"
 			} else {
 
 				err := item.SetSizeTorrent()

@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-const connectionLogFile string = "connection.log"
+const connectionLogFile string = "connectionLog.json"
 const logFile = "dlcenterLog.json"
 
 type HTTPReqInfo struct {

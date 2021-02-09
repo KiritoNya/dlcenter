@@ -3,18 +3,20 @@ package main
 import (
 	"encoding/json"
 	"github.com/KiritoNya/database"
-	logger "github.com/sirupsen/logrus"
 	qbt "github.com/KiritoNya/go-qbittorrent"
+	logger "github.com/sirupsen/logrus"
 	"log"
 	"net/http"
-	"time"
 	"os"
+	"time"
 )
 
-const itemsDatabaseFile = "items.db"
+const itemsDatabaseFile = "<username>:<password>tcp(<host_ip>:<port>)/<database>"
+//const itemsDatabaseFile = "items.db"
 const maxDownloads = 2
-const driverDatabase = "sqlite3"
-const qbitorrentLink = "http://127.0.0.1:8080/"
+const driverDatabase = "mysql"
+//const driverDatabase = "sqlite3"
+const qbitorrentLink = "http://<host_ip>:<port>/"
 
 var qb *qbt.Client
 

@@ -110,7 +110,7 @@ func (i *Item) SetSizeTorrent() error {
 }
 
 func (i *Item) SetPercentage() {
-	i.Percentage = fmt.Sprintf("%.02f", 100.0/ float64(i.Size/i.DownloadedByte)) + "%"
+	i.Percentage = fmt.Sprint(int(float32(i.DownloadedByte*100) / float32(i.Size)), "%")
 }
 
 func (i *Item) CheckFilePath() error {
@@ -263,7 +263,7 @@ func (i *Item) RemoveTorrent() error {
 		}
 	}
 
-	resp, err := qb.DeletePermanently([]string{i.Hash})
+	resp, err := qb.DeleteTemp([]string{i.Hash})
 	if err != nil {
 		return err
 	}

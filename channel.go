@@ -270,7 +270,7 @@ func (c *Channel) checkProgressTorrent(id string) {
 
 		//Check finish
 		if item.Size == item.DownloadedByte { //Completed
-			item.Status = complete
+			q.Items[id].Status = complete
 			c.Signaller <- id
 			return
 		}
