@@ -110,7 +110,7 @@ func (i *Item) SetSizeTorrent() error {
 }
 
 func (i *Item) SetPercentage() {
-	i.Percentage = fmt.Sprint(int(float32(i.DownloadedByte*100) / float32(i.Size)), "%")
+	i.Percentage = fmt.Sprint(int(float32(i.DownloadedByte*100)/float32(i.Size)), "%")
 }
 
 func (i *Item) CheckFilePath() error {
@@ -209,7 +209,6 @@ func (i *Item) SetDownloadedByteTorrent() error {
 
 func (i *Item) PauseTorrent() error {
 
-
 	//Get hash if it is not setted
 	if i.Hash == "" {
 		err := i.GetHashTorrent()
@@ -277,4 +276,27 @@ func (i *Item) RemoveTorrent() error {
 
 	log.Println(string(content))
 	return nil
+}
+
+func (i *Item) isCompleted() (bool, error) {
+
+	//Get hash if it is not setted
+	if i.Hash == "" {
+		err := i.GetHashTorrent()
+		if err != nil {
+			return false, err
+		}
+	}
+
+	//Get Information of torrent
+	t, err := qb.Torrent(i.Hash)
+	if err != nil {
+		return false, err
+	}
+
+	if t.CompletionDate > 0 {
+		return true, nil
+	}
+
+	return false, nil
 }

@@ -204,9 +204,9 @@ func (c *Channel) HandlerState() {
 				q.Items[id].DownloadedByte = q.Items[id].Size
 
 				//Decrease active download number
-					q.mu.Lock()
-					q.Active--
-					q.mu.Unlock()
+				q.mu.Lock()
+				q.Active--
+				q.mu.Unlock()
 
 				c.activeNextDownload(id)
 
@@ -264,12 +264,18 @@ func (c *Channel) checkProgressTorrent(id string) {
 		//Set downloaded byte
 		err = item.SetDownloadedByteTorrent()
 		if err != nil {
-			log.Println(err)
+			logger.WithField("function", "CheckProgressTorrent").Error(q.Items[id].NameFile+" ", err)
 			return
 		}
 
 		//Check finish
-		if item.Size == item.DownloadedByte { //Completed
+		check, err := q.Items[id].isCompleted()
+		if err != nil {
+			logger.WithField("function", "CheckProgressTorrent").Error(q.Items[id].NameFile+" ", err)
+			return
+		}
+
+		if check == true { //Completed
 			q.Items[id].Status = complete
 			c.Signaller <- id
 			return
